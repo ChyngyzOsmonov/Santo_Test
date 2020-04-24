@@ -55,7 +55,7 @@ def send_welcome(message):
         reply_markup=main_button)
 
 
-#########################################################Profile###################################################
+#########################################################Test###################################################
 
 @bot.message_handler(commands=["test"])
 def user_reg(message):
@@ -264,21 +264,21 @@ def getRegData(user, title, name):
 
 def getResult(user):
     true_count = 0
-    if user.q1 == 'Фуросемид':
+    if user.q1 == 'Торасемид':
         true_count += 1
-    if user.q2 == '10 мг, 5 мг':
+    if user.q2 == '10 мг, 5 мг, 2,5 мг':
         true_count += 1
-    if user.q3 == 'Отеки только сердечного генеза':
+    if user.q3 == 'Отеки любого генеза':
         true_count += 1
     if user.q4 == '5 лет':
         true_count += 1
-    if user.q5 == 'Тромбо-Асс':
+    if user.q5 == 'Тромбопол':
         true_count += 1
-    if user.q6 == 'Анальгетик':
+    if user.q6 == 'Антиагрегант':
         true_count += 1
-    if user.q7 == 'Кардиомагнила':
+    if user.q7 == 'Тромбопола':
         true_count += 1
-    if user.q8 == 'Тромбо-Асс':
+    if user.q8 == 'Тромбопол':
         true_count += 1
     return f'<b>У Вас {true_count} правильных ответов</b>'
 
@@ -495,19 +495,19 @@ def getResult_test2(user2):
     true_count_2 = 0
     if user2.q1 == 'Ацетисалициловую кислоту':
         true_count_2 += 1
-    if user2.q2 == 'Лизинопри':
+    if user2.q2 == 'Периндоприл':
         true_count_2 += 1
     if user2.q3 == 'Периндоприла':
         true_count_2 += 1
-    if user2.q4 == 'Эналаприл':
+    if user2.q4 == 'Периндоприл':
         true_count_2 += 1
-    if user2.q5 == 'Рамиприла':
+    if user2.q5 == 'Периндоприла':
         true_count_2 += 1
-    if user2.q6 == 'Лизиноприл':
+    if user2.q6 == 'Периндоприл':
         true_count_2 += 1
     if user2.q7 == 'Индапамид SR':
         true_count_2 += 1
-    if user2.q8 == '2,5 мг':
+    if user2.q8 == '1,5 мг':
         true_count_2 += 1
     return f'<b>У Вас {true_count_2} правильных ответов</b>'
 
@@ -663,15 +663,15 @@ def getRegData_test3(user3, title, name):
 
 def getResult_test3(user3):
     true_count_3 = 0
-    if user3.q1 == 'Бисептол':
+    if user3.q1 == 'Цефтриаксон':
         true_count_3 += 1
-    if user3.q2 == 'Азитромицин':
+    if user3.q2 == 'Цефтриаксон':
         true_count_3 += 1
-    if user3.q3 == 'Увеличивает концентрацию антибиотиков в мокроте и бронхиальном секрете':
+    if user3.q3 == 'Все выше перечисленное':
         true_count_3 += 1
-    if user3.q4 == 'Обладает противовоспалительным эффектом':
+    if user3.q4 == 'Все выше перечисленное':
         true_count_3 += 1
-    if user3.q5 == 'Таблетки':
+    if user3.q5 == 'Все выше перечисленное':
         true_count_3 += 1
     return f'<b>У Вас {true_count_3} правильных ответов</b>'
 

@@ -228,8 +228,19 @@ def process_q8_step(message):
         bot.send_message(chat_id, getRegData(user, 'Вы закончили тест\nВаши ответы', message.from_user.first_name),
                          parse_mode="Markdown", reply_markup=markup)
         bot.send_message(chat_id, getResult(user), parse_mode='HTML', reply_markup=main_button)
+        bot.send_message(chat_id, '<b>Правильные ответы к тесту №1</b>\n\n'
+                                  'Какой диуретик уменьшает развитие фиброза миокарда? \n<b>-Торасемид</b>\n'
+                                  'Сколько дозировок у Тригрима? \n<b>-10 мг, 5 мг, 2,5 мг</b>\n'
+                                  'Показания к назначению Тригрима: \n<b>-Отеки любого генеза</b>\n'
+                                  'Срок годности Тригрима: \n<b>-5 лет</b>\n'
+                                  'Дозировки 75 мг и 150 мг характерны для \n<b>-Тромбопол</b>\n'
+                                  'Фармацевтическая группа Тромбопола: \n<b>-Антиагрегант</b>\n'
+                                  'Кишечнорастворимая оболочка у \n<b>-Тромбопола</b>\n'
+                                  'Чей слоган: Твое сердце бьется не только для тебя! \n<b>-Тромбопол</b>',
+                         parse_mode='HTML')
         bot.send_message(cfg.chat_id, getRegData(user, 'Заявка от бота', bot.get_me().username),
                          parse_mode="Markdown")
+        bot.send_message(cfg.chat_id, getResult(user), parse_mode='HTML')
 
     except Exception as e:
         # bot.reply_to(message, 'Повторите попытку')
@@ -280,7 +291,8 @@ def getResult(user):
         true_count += 1
     if user.q8 == 'Тромбопол':
         true_count += 1
-    return f'<b>У Вас {true_count} правильных ответов</b>'
+    return f'<b>{user.fullname}</b>\nПравильных ответов всего: {true_count}'
+
 
 ############################################test2##################################################################
 
@@ -403,7 +415,7 @@ def process_q5_step_test2(message):
         Q6.add()
 
         msg = bot.send_message(chat_id, 'Уменьшает риск развития ХСН  на  39%, риск ОИМ на  24%',
-                reply_markup=Q6)
+                               reply_markup=Q6)
         bot.register_next_step_handler(msg, process_q6_step_test2)
 
     except Exception as e:
@@ -455,11 +467,25 @@ def process_q8_step_test2(message):
 
         markup = types.ReplyKeyboardRemove(selective=False)
 
-        bot.send_message(chat_id, getRegData_test2(user2, 'Вы закончили тест\nВаши ответы', message.from_user.first_name),
+        bot.send_message(chat_id,
+                         getRegData_test2(user2, 'Вы закончили тест\nВаши ответы', message.from_user.first_name),
                          parse_mode="Markdown", reply_markup=markup)
         bot.send_message(chat_id, getResult_test2(user2), parse_mode='HTML', reply_markup=main_button)
+        bot.send_message(chat_id, '<b>Правильные ответы к тесту №2</b>\n\n'
+                                  'Для профилактики инфаркта и инсульта назначают :\n<b>-Ацетисалициловую кислоту</b>\n'
+                                  'Самый высокий уровень липофильности у \n<b>-Периндоприл</b>\n'
+                                  'В наименьшей степени среди всех иАПФ  гипотония первой дозы развивается у '
+                                  '\n<b>-Периндоприла</b>\n'
+                                  'Самая большая доказательная база у \n<b>-Периндоприл</b>\n'
+                                  'Для пациентов, перенесших мозговой инсульт наибольшая эффективность'
+                                  ' (класс I, уровень А) доказана у \n<b>-Периндоприла</b>\n'
+                                  'Уменьшает риск развития ХСН  на  39%, риск ОИМ на  24%: \n<b>-Периндоприл</b>\n'
+                                  'Тиазидоподобный диуретик с пролонгированным механизмом действия: \n'
+                                  '<b>-Индапамид SR</b>\n'
+                                  'Доза активного вещества в Индапамиде SR: \n<b>-1,5 мг</b>', parse_mode='HTML')
         bot.send_message(cfg.chat_id, getRegData(user2, 'Заявка от бота', bot.get_me().username),
                          parse_mode="Markdown")
+        bot.send_message(cfg.chat_id, getResult_test2(user2), parse_mode='HTML')
 
     except Exception as e:
         print(e)
@@ -509,7 +535,8 @@ def getResult_test2(user2):
         true_count_2 += 1
     if user2.q8 == '1,5 мг':
         true_count_2 += 1
-    return f'<b>У Вас {true_count_2} правильных ответов</b>'
+    return f'<b>{user2.fullname}</b>\nПравильных ответов всего: {true_count_2}'
+
 
 #############################################test3############################################################
 
@@ -631,11 +658,23 @@ def process_q5_step_test3(message):
 
         markup = types.ReplyKeyboardRemove(selective=False)
 
-        bot.send_message(chat_id, getRegData_test3(user3, 'Вы закончили тест\nВаши ответы', message.from_user.first_name),
+        bot.send_message(chat_id,
+                         getRegData_test3(user3, 'Вы закончили тест\nВаши ответы', message.from_user.first_name),
                          parse_mode="Markdown", reply_markup=markup)
         bot.send_message(chat_id, getResult_test3(user3), parse_mode='HTML', reply_markup=main_button)
-        bot.send_message(cfg.chat_id, getRegData(user3, 'Заявка от бота', bot.get_me().username),
+        bot.send_message(chat_id, '<b>Правильные ответы к тесту №3</b>\n\n'
+                                  'Выражение: Надежный ход в борьбе с инфекцией , '
+                                  'подходит больше для :\n<b>-Цефтриаксон</b>\n'
+                                  'Бета-лактамный антибактериальный препарат '
+                                  'широкого спектра действия – это \n<b>-Цефтриаксон</b>\n'
+                                  'Амбро- эффект с первых часов применения, за счет чего: \n'
+                                  '<b>-Все выше перечисленное</b>\n'
+                                  'Механизм действия Амбро: \n<b>-Все выше перечисленное</b>\n'
+                                  'Какие формы выпуска есть у Амбро: \n<b>-Все выше перечисленное</b>',
+                         parse_mode='HTML')
+        bot.send_message(cfg.chat_id, getRegData(user3, 'Тест сдали на ', bot.get_me().username),
                          parse_mode="Markdown")
+        bot.send_message(cfg.chat_id, getResult_test3(user3), parse_mode='HTML')
 
     except Exception as e:
         print(e)
@@ -673,7 +712,7 @@ def getResult_test3(user3):
         true_count_3 += 1
     if user3.q5 == 'Все выше перечисленное':
         true_count_3 += 1
-    return f'<b>У Вас {true_count_3} правильных ответов</b>'
+    return f'<b>{user3.fullname}</b>\nПравильных ответов всего: {true_count_3}'
 
 
 try:

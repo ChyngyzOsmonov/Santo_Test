@@ -78,7 +78,6 @@ def process_fio_step(message):
         bot.register_next_step_handler(msg, process_q1_step)
 
     except Exception as e:
-        # bot.reply_to(message, 'Попробуйте еще раз')
         print(e)
 
 
@@ -98,7 +97,6 @@ def process_q1_step(message):
         bot.register_next_step_handler(msg, process_q2_step)
 
     except Exception as e:
-        # bot.reply_to(message, 'Повторите попытку')
         print(e)
 
 
@@ -118,7 +116,6 @@ def process_q2_step(message):
         bot.register_next_step_handler(msg, process_q3_step)
 
     except Exception as e:
-        # bot.reply_to(message, 'Повторите попытку')
         print(e)
 
 
@@ -137,7 +134,6 @@ def process_q3_step(message):
         bot.register_next_step_handler(msg, process_q4_step)
 
     except Exception as e:
-        # bot.reply_to(message, 'Повторите попытку')
         print(e)
 
 
@@ -156,7 +152,6 @@ def process_q4_step(message):
         bot.register_next_step_handler(msg, process_q5_step)
 
     except Exception as e:
-        # bot.reply_to(message, 'Повторите попытку')
         print(e)
 
 
@@ -175,7 +170,6 @@ def process_q5_step(message):
         bot.register_next_step_handler(msg, process_q6_step)
 
     except Exception as e:
-        # bot.reply_to(message, 'Повторите попытку')
         print(e)
 
 
@@ -194,7 +188,6 @@ def process_q6_step(message):
         bot.register_next_step_handler(msg, process_q7_step)
 
     except Exception as e:
-        # bot.reply_to(message, 'Повторите попытку')
         print(e)
 
 
@@ -213,7 +206,6 @@ def process_q7_step(message):
         bot.register_next_step_handler(msg, process_q8_step)
 
     except Exception as e:
-        # bot.reply_to(message, 'Повторите попытку')
         print(e)
 
 
@@ -225,9 +217,12 @@ def process_q8_step(message):
 
         markup = types.ReplyKeyboardRemove(selective=False)
 
-        bot.send_message(chat_id, getRegData(user, 'Вы закончили тест\nВаши ответы', message.from_user.first_name),
+        bot.send_message(chat_id, getRegData(user, 'Вы закончили тест\nВаши ответы', message.from_user.first_name,
+                                             getResult(user)),
                          parse_mode="Markdown", reply_markup=markup)
-        bot.send_message(chat_id, getResult(user), parse_mode='HTML', reply_markup=main_button)
+        bot.send_message(cfg.chat_id, getRegData(user, 'Тест сдали на ', bot.get_me().username, getResult(user)),
+                         parse_mode="Markdown")
+
         bot.send_message(chat_id, '<b>Правильные ответы к тесту №1</b>\n\n'
                                   'Какой диуретик уменьшает развитие фиброза миокарда? \n<b>-Торасемид</b>\n'
                                   'Сколько дозировок у Тригрима? \n<b>-10 мг, 5 мг, 2,5 мг</b>\n'
@@ -237,17 +232,15 @@ def process_q8_step(message):
                                   'Фармацевтическая группа Тромбопола: \n<b>-Антиагрегант</b>\n'
                                   'Кишечнорастворимая оболочка у \n<b>-Тромбопола</b>\n'
                                   'Чей слоган: Твое сердце бьется не только для тебя! \n<b>-Тромбопол</b>',
+                         reply_markup=main_button,
                          parse_mode='HTML')
-        bot.send_message(cfg.chat_id, getRegData(user, 'Заявка от бота', bot.get_me().username),
-                         parse_mode="Markdown")
-        bot.send_message(cfg.chat_id, getResult(user), parse_mode='HTML')
+        bot.send_video(chat_id, sendPhoto(user))
 
     except Exception as e:
-        # bot.reply_to(message, 'Повторите попытку')
         print(e)
 
 
-def getRegData(user, title, name):
+def getRegData(user, title, name, get_result):
     t = Template('$title *$name* \nФИО: *$fullname* '
                  '\nВопрос №1: *$q1* '
                  '\nВопрос №2: *$q2*'
@@ -256,9 +249,11 @@ def getRegData(user, title, name):
                  '\nВопрос №5: *$q5*'
                  '\nВопрос №6: *$q6*'
                  '\nВопрос №7: *$q7*'
-                 '\nВопрос №8: *$q8*')
+                 '\nВопрос №8: *$q8*'
+                 '\n*$get_result*')
 
     return t.substitute({
+        'get_result': get_result,
         'title': title,
         'name': name,
         'fullname': user.fullname,
@@ -291,11 +286,37 @@ def getResult(user):
         true_count += 1
     if user.q8 == 'Тромбопол':
         true_count += 1
-    return f'<b>{user.fullname}</b>\nПравильных ответов всего: {true_count}'
+
+    if true_count >= 7:
+        return f'\nСупер! У вас отличные знания!\nПравильных ответов всего: {true_count}'
+    elif true_count <= 7:
+        return f'\nНеплохо!\nПравильных ответов всего: {true_count}'
+
+
+def sendPhoto(user):
+    true_count = 0
+    if user.q1 == 'Торасемид':
+        true_count += 1
+    if user.q2 == '10 мг, 5 мг, 2,5 мг':
+        true_count += 1
+    if user.q3 == 'Отеки любого генеза':
+        true_count += 1
+    if user.q4 == '5 лет':
+        true_count += 1
+    if user.q5 == 'Тромбопол':
+        true_count += 1
+    if user.q6 == 'Антиагрегант':
+        true_count += 1
+    if user.q7 == 'Тромбопола':
+        true_count += 1
+    if user.q8 == 'Тромбопол':
+        true_count += 1
+
+    if true_count >= 7:
+        return open('/home/test/Santo_Test/images/giphy.gif.mp4', 'rb')
 
 
 ############################################test2##################################################################
-
 
 @bot.message_handler(commands=["test2"])
 def user_reg_test2(message):
@@ -468,9 +489,13 @@ def process_q8_step_test2(message):
         markup = types.ReplyKeyboardRemove(selective=False)
 
         bot.send_message(chat_id,
-                         getRegData_test2(user2, 'Вы закончили тест\nВаши ответы', message.from_user.first_name),
+                         getRegData_test2(user2, 'Вы закончили тест\nВаши ответы', message.from_user.first_name,
+                                          getResult_test2(user2)),
                          parse_mode="Markdown", reply_markup=markup)
-        bot.send_message(chat_id, getResult_test2(user2), parse_mode='HTML', reply_markup=main_button)
+        bot.send_message(cfg.chat_id,
+                         getRegData_test2(user2, 'Закончили тест на ', bot.get_me().username,
+                                          getResult_test2(user2)),
+                         parse_mode="Markdown")
         bot.send_message(chat_id, '<b>Правильные ответы к тесту №2</b>\n\n'
                                   'Для профилактики инфаркта и инсульта назначают :\n<b>-Ацетисалициловую кислоту</b>\n'
                                   'Самый высокий уровень липофильности у \n<b>-Периндоприл</b>\n'
@@ -482,17 +507,16 @@ def process_q8_step_test2(message):
                                   'Уменьшает риск развития ХСН  на  39%, риск ОИМ на  24%: \n<b>-Периндоприл</b>\n'
                                   'Тиазидоподобный диуретик с пролонгированным механизмом действия: \n'
                                   '<b>-Индапамид SR</b>\n'
-                                  'Доза активного вещества в Индапамиде SR: \n<b>-1,5 мг</b>', parse_mode='HTML')
-        bot.send_message(cfg.chat_id, getRegData(user2, 'Заявка от бота', bot.get_me().username),
-                         parse_mode="Markdown")
-        bot.send_message(cfg.chat_id, getResult_test2(user2), parse_mode='HTML')
+                                  'Доза активного вещества в Индапамиде SR: \n<b>-1,5 мг</b>', reply_markup=main_button,
+                         parse_mode='HTML')
+        bot.send_video(chat_id, sendPhoto_test2(user2))
 
     except Exception as e:
         print(e)
 
 
-def getRegData_test2(user2, title, name):
-    t = Template('$title *$name* \nФИО: *$fullname* '
+def getRegData_test2(user2, title, name, get_result_2):
+    t = Template('$title *$name* \n\nФИО: *$fullname* '
                  '\nВопрос №1: *$q1* '
                  '\nВопрос №2: *$q2*'
                  '\nВопрос №3: *$q3*'
@@ -500,9 +524,11 @@ def getRegData_test2(user2, title, name):
                  '\nВопрос №5: *$q5*'
                  '\nВопрос №6: *$q6*'
                  '\nВопрос №7: *$q7*'
-                 '\nВопрос №8: *$q8*')
+                 '\nВопрос №8: *$q8*'
+                 '\n*$get_result_2*')
 
     return t.substitute({
+        'get_result_2': get_result_2,
         'title': title,
         'name': name,
         'fullname': user2.fullname,
@@ -535,7 +561,34 @@ def getResult_test2(user2):
         true_count_2 += 1
     if user2.q8 == '1,5 мг':
         true_count_2 += 1
-    return f'<b>{user2.fullname}</b>\nПравильных ответов всего: {true_count_2}'
+
+    if true_count_2 >= 7:
+        return f'\nСупер! У вас отличные знания!\nПравильных ответов всего: {true_count_2}'
+    elif true_count_2 <= 7:
+        return f'\nНеплохо!\nПравильных ответов всего: {true_count_2}'
+
+
+def sendPhoto_test2(user2):
+    true_count_2 = 0
+    if user2.q1 == 'Ацетисалициловую кислоту':
+        true_count_2 += 1
+    if user2.q2 == 'Периндоприл':
+        true_count_2 += 1
+    if user2.q3 == 'Периндоприла':
+        true_count_2 += 1
+    if user2.q4 == 'Периндоприл':
+        true_count_2 += 1
+    if user2.q5 == 'Периндоприла':
+        true_count_2 += 1
+    if user2.q6 == 'Периндоприл':
+        true_count_2 += 1
+    if user2.q7 == 'Индапамид SR':
+        true_count_2 += 1
+    if user2.q8 == '1,5 мг':
+        true_count_2 += 1
+
+    if true_count_2 >= 7:
+        return open('/home/test/Santo_Test/images/giphy.gif.mp4', 'rb')
 
 
 #############################################test3############################################################
@@ -562,7 +615,6 @@ def process_fio_step_test3(message):
         bot.register_next_step_handler(msg, process_q1_step_test3)
 
     except Exception as e:
-        # bot.reply_to(message, 'Попробуйте еще раз')
         print(e)
 
 
@@ -582,7 +634,6 @@ def process_q1_step_test3(message):
         bot.register_next_step_handler(msg, process_q2_step_test3)
 
     except Exception as e:
-        # bot.reply_to(message, 'Повторите попытку')
         print(e)
 
 
@@ -659,9 +710,13 @@ def process_q5_step_test3(message):
         markup = types.ReplyKeyboardRemove(selective=False)
 
         bot.send_message(chat_id,
-                         getRegData_test3(user3, 'Вы закончили тест\nВаши ответы', message.from_user.first_name),
+                         getRegData_test3(user3, 'Вы закончили тест\nВаши ответы ', message.from_user.first_name,
+                                          getResult_test3(user3)),
                          parse_mode="Markdown", reply_markup=markup)
-        bot.send_message(chat_id, getResult_test3(user3), parse_mode='HTML', reply_markup=main_button)
+        bot.send_message(cfg.chat_id,
+                         getRegData_test3(user3, 'Тест закончили на ', bot.get_me().username,
+                                          getResult_test3(user3)),
+                         parse_mode="Markdown")
         bot.send_message(chat_id, '<b>Правильные ответы к тесту №3</b>\n\n'
                                   'Выражение: Надежный ход в борьбе с инфекцией , '
                                   'подходит больше для :\n<b>-Цефтриаксон</b>\n'
@@ -671,24 +726,26 @@ def process_q5_step_test3(message):
                                   '<b>-Все выше перечисленное</b>\n'
                                   'Механизм действия Амбро: \n<b>-Все выше перечисленное</b>\n'
                                   'Какие формы выпуска есть у Амбро: \n<b>-Все выше перечисленное</b>',
+                         reply_markup=main_button,
                          parse_mode='HTML')
-        bot.send_message(cfg.chat_id, getRegData(user3, 'Тест сдали на ', bot.get_me().username),
-                         parse_mode="Markdown")
-        bot.send_message(cfg.chat_id, getResult_test3(user3), parse_mode='HTML')
+
+        bot.send_video(chat_id, sendPhoto_test3(user3))
 
     except Exception as e:
         print(e)
 
 
-def getRegData_test3(user3, title, name):
-    t = Template('$title *$name* \nФИО: *$fullname* '
+def getRegData_test3(user3, title, name, get_result_3):
+    t = Template('$title *$name*\n\nФИО: *$fullname* '
                  '\nВопрос №1: *$q1* '
                  '\nВопрос №2: *$q2*'
                  '\nВопрос №3: *$q3*'
                  '\nВопрос №4: *$q4*'
-                 '\nВопрос №5: *$q5*')
+                 '\nВопрос №5: *$q5*'
+                 '\n*$get_result_3*')
 
     return t.substitute({
+        'get_result_3': get_result_3,
         'title': title,
         'name': name,
         'fullname': user3.fullname,
@@ -712,7 +769,28 @@ def getResult_test3(user3):
         true_count_3 += 1
     if user3.q5 == 'Все выше перечисленное':
         true_count_3 += 1
-    return f'<b>{user3.fullname}</b>\nПравильных ответов всего: {true_count_3}'
+
+    if true_count_3 >= 4:
+        return f'\nСупер! У вас отличные знания!\nПравильных ответов всего: {true_count_3}'
+    elif true_count_3 <= 4:
+        return f'\nНеплохо!\nПравильных ответов всего: {true_count_3}'
+
+
+def sendPhoto_test3(user3):
+    true_count_3 = 0
+    if user3.q1 == 'Цефтриаксон':
+        true_count_3 += 1
+    if user3.q2 == 'Цефтриаксон':
+        true_count_3 += 1
+    if user3.q3 == 'Все выше перечисленное':
+        true_count_3 += 1
+    if user3.q4 == 'Все выше перечисленное':
+        true_count_3 += 1
+    if user3.q5 == 'Все выше перечисленное':
+        true_count_3 += 1
+
+    if true_count_3 >= 4:
+        return open('/home/test/Santo_Test/images/giphy.gif.mp4', 'rb')
 
 
 try:

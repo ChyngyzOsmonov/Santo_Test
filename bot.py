@@ -234,7 +234,7 @@ def process_q8_step(message):
                                   'Чей слоган: Твое сердце бьется не только для тебя! \n<b>-Тромбопол</b>',
                          reply_markup=main_button,
                          parse_mode='HTML')
-        bot.send_video(chat_id, sendPhoto(user))
+        bot.send_photo(chat_id, sendPhoto(user))
 
     except Exception as e:
         print(e)
@@ -313,7 +313,7 @@ def sendPhoto(user):
         true_count += 1
 
     if true_count >= 7:
-        return open('/home/test/Santo_Test/images/giphy.gif.mp4', 'rb')
+        return open('/home/test/Santo_Test/images/super.jpg', 'rb')
 
 
 ############################################test2##################################################################
@@ -509,7 +509,7 @@ def process_q8_step_test2(message):
                                   '<b>-Индапамид SR</b>\n'
                                   'Доза активного вещества в Индапамиде SR: \n<b>-1,5 мг</b>', reply_markup=main_button,
                          parse_mode='HTML')
-        bot.send_video(chat_id, sendPhoto_test2(user2))
+        bot.send_photo(chat_id, sendPhoto_test2(user2))
 
     except Exception as e:
         print(e)
@@ -588,7 +588,7 @@ def sendPhoto_test2(user2):
         true_count_2 += 1
 
     if true_count_2 >= 7:
-        return open('/home/test/Santo_Test/images/giphy.gif.mp4', 'rb')
+        return open('/home/test/Santo_Test/images/super.jpg', 'rb')
 
 
 #############################################test3############################################################
@@ -729,7 +729,7 @@ def process_q5_step_test3(message):
                          reply_markup=main_button,
                          parse_mode='HTML')
 
-        bot.send_video(chat_id, sendPhoto_test3(user3))
+        bot.send_photo(chat_id, sendPhoto_test3(user3))
 
     except Exception as e:
         print(e)
@@ -790,7 +790,7 @@ def sendPhoto_test3(user3):
         true_count_3 += 1
 
     if true_count_3 >= 4:
-        return open('/home/test/Santo_Test/images/giphy.gif.mp4', 'rb')
+        return open('/home/test/Santo_Test/images/super.jpg', 'rb')
 
 
 try:
